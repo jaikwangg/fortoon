@@ -1,0 +1,6 @@
+
+/api/story/[id]/chapter/[id] -> wrong
+
+ Failed to reload dynamic routes: Error: You cannot have the same slug name "id" repeat within a single dynamic path
+
+/api/story/[storyId]/chapter/[chapterId] -> ok

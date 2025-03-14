@@ -1,0 +1,60 @@
+import { NextResponse } from 'next/server';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
+import { storage } from '@/lib/firebase';
+
+export async function POST(
+  request: Request,
+  { params }: { params: { storyId: string } }
+) {
+  try {
+    const formData = await request.formData();
+    const images = formData.getAll('images') as File[];
+    
+    // Initialize progress tracking
+    let uploadedImages = 0;
+    const totalImages = images.length;
+    
+    // Array to store uploaded image URLs
+    const imageUrls: string[] = [];
+
+    // Upload images one by one
+    for (const image of images) {
+      const imageRef = ref(storage, `chapters/${uuidv4()}`);
+      
+      // Create upload task with progress monitoring
+      const uploadTask = uploadBytesResumable(imageRef, image);
+      
+      // Wait for upload to complete while tracking progress
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Calculate progress for current image
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // You can emit this progress to the client if needed
+            console.log(`Upload progress: ${progress}%`);
+          },
+          (error) => {
+            reject(error);
+          },
+          async () => {
+            const url = await getDownloadURL(imageRef);
+            imageUrls.push(url);
+            uploadedImages++;
+            resolve(null);
+          }
+        );
+      });
+    }
+
+    // ... rest of your existing code ...
+
+  } catch (error) {
+    console.error('Error creating chapter:', error);
+    return NextResponse.json(
+      { error: 'Failed to create chapter' },
+      { status: 500 }
+    );
+  }
+} 

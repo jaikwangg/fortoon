@@ -1,0 +1,2 @@
+READ THIS
+https://medium.com/@xhowais/next-js-file-upload-api-tutorial-local-directroy-7ec039efbd66

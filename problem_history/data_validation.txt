@@ -1,0 +1,2 @@
+source for zod parsing form-data (for file uploading)
+https://blog.stackademic.com/upgrade-your-full-stack-form-validation-with-zod-and-react-hook-form-in-next-js-107b014628a3

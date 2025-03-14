@@ -1,0 +1,1 @@
+mysqldump --host=127.0.0.1 --port=3366 -u root -p fortoon_db > mysql-db/fortoon_db_dump.sql

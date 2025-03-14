@@ -1,0 +1,5 @@
+รันคำสั่ง docker compose up ให้ db ไม่ได้
+
+ลองแก้ด้วย
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+https://github.com/apache/superset/issues/25434

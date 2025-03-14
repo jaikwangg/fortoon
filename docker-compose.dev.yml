@@ -1,0 +1,85 @@
+version: "3"
+
+services:
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      # So you don't have to use root, but you can if you like
+      # MYSQL_USER: ${DB_USER}
+      # You can use whatever password you like
+      # MYSQL_PASSWORD: ${DB_PW}
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: ${DB_PW}
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_INITDB_SKIP_TZDATA: 'yes'
+
+    command: --default-authentication-plugin=mysql_native_password --wait_timeout=28800 --interactive_timeout=28800
+
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - ${DB_LOCAL_PORT}:${DB_DOCKER_PORT}
+    expose:
+      # Opens port 3306 on the container
+      - ${DB_DOCKER_PORT}
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+
+    env_file:
+      - .env
+    networks:
+      - my_network
+
+
+  next-app:
+    depends_on:
+      - db
+    container_name: next-app
+    build:
+      context: ./next-app
+      dockerfile: dev.Dockerfile
+
+    # Set environment variables directly in the docker-compose file
+    environment:
+      ENV_VARIABLE: ${ENV_VARIABLE}
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    command: bun run dev
+
+    # Set environment variables based on the .env file
+    env_file:
+      - ./next-app/.env
+    volumes:
+      - ./next-app/src:/app/src
+      - ./next-app/public:/app/public
+    restart: always
+    ports:
+      - 3733:3000
+    networks:
+      - my_network
+
+
+  db-backup:
+      image: mysql:5.7
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: ${DB_PW}
+      volumes:
+        - my-db:/var/lib/mysql
+        - ./backups:/backups  # Mount a directory for backup storage
+      entrypoint: /bin/sh -c "sleep 10; while :; do mysqldump -h db -u root -p${DB_PW} ${DB_NAME} > /backups/sql_dump.sql; sleep 1200; done"
+      networks:
+        - my_network
+
+    # Define a network, which allows containers to communicate
+    # with each other, by using their container name as a hostname
+networks:
+  my_network:
+    external: true
+    driver: bridge
+
+volumes:
+  my-db:
