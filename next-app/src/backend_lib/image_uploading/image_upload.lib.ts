@@ -10,7 +10,7 @@ cloudinary.config({
 });
 
 export const uploadImage = async (file: File, filename: string): Promise<IStandardResponse> => {
-    let stdRes: IStandardResponse = {};
+    const stdRes: IStandardResponse = {};
     // console.log(file)
 
     try {
@@ -30,7 +30,7 @@ export const uploadImage = async (file: File, filename: string): Promise<IStanda
             public_id: filename,
         });
 
-        let msg = `Successfully uploaded image named [${filename}] to Cloudinary`.green;
+        const msg = `Successfully uploaded image named [${filename}] to Cloudinary`.green;
         stdRes.status = 200;
         stdRes.msg = msg;
         stdRes.data = {

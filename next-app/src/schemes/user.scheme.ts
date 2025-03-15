@@ -3,7 +3,6 @@ import { ESex } from '@/types/ISex'
 import { File } from 'buffer'
 // import { File } from 'buffer'
 import { z } from 'zod'
-import { zfd } from "zod-form-data"
 
 export const CreateUserScheme = z.object({
     username: z.string().min(4),

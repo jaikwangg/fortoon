@@ -1,8 +1,6 @@
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from '@/constant/constants'
-import { numericString } from '@/backend_lib/parsers';
 import { File } from 'buffer';
 import { z } from 'zod'
-import { zfd } from "zod-form-data"
 
 export const postStoryScheme = z.object({
     title: z.string(),
@@ -37,7 +35,6 @@ export const postStoryScheme = z.object({
 })
 
 export type TPostStoryScheme = z.infer<typeof postStoryScheme>;
-
 
 export const updateStorySchema = z.object({
     title: z.string().max(100).nullable().optional(),

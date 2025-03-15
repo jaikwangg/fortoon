@@ -500,9 +500,9 @@ const CommunityPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
-  const { theme } = useSettings();
+  // const { theme } = useSettings();
   const { toast } = useToast();
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [postFormData, setPostFormData] = useState<PostFormData>({
