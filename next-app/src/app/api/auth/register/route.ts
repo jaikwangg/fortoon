@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
         // Validate and parse the data using Zod schema
         parsed = CreateUserScheme.parse(jsonObject);
-    } catch (error: any) {
+    } catch (error: unknown) {
         let errorMessage = "An unknown error occurred";
         if (error instanceof Error) {
             errorMessage = error.message;
