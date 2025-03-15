@@ -27,9 +27,13 @@ export async function POST(req: NextRequest) {
         // Validate and parse the data using Zod schema
         parsed = CreateUserScheme.parse(jsonObject);
     } catch (error: any) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
         stdRes = {
             msg: "Fail to parse data",
-            msg2: error.message || error,
+            msg2: errorMessage,
         };
         return NextResponse.json(stdRes, { status: 500 });
     }
@@ -81,22 +85,26 @@ export async function POST(req: NextRequest) {
         response = setJwtTokenCookie({ username: parsed.username, uId: userId }, response);
         return response;
 
-    } catch (error: any) {
-        if (error.code === 'ER_DUP_ENTRY') {
-            // Handle duplicate entry error
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        
+        // Check if the error has a 'code' property and it's 'ER_DUP_ENTRY'
+        if (error instanceof Error && (error as any).code === 'ER_DUP_ENTRY') {
             stdRes = {
-                msg: "Duplicate entry error: A user with this field already exists.",
-                msg2: error.message,
+            msg: "Duplicate entry error: A user with this field already exists.",
+            msg2: errorMessage,
             };
             return NextResponse.json(stdRes, { status: 409 });
         }
 
         console.log(error);
 
-        // Handle other SQL errors
         stdRes = {
             msg: "Error creating new User",
-            msg2: error.message || error,
+            msg2: errorMessage,
         };
         return NextResponse.json(stdRes, { status: 500 });
     }
