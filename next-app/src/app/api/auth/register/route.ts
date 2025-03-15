@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import { QueryResult, ResultSetHeader, RowDataPacket } from "mysql2";
+import { ResultSetHeader  } from "mysql2";
 import { dbConnection } from "@/db/dbConnector";
 import { IStandardResponse } from "@/types/IApiCommunication";
 import { formDataToJsonObject } from "@/backend_lib/parsers";

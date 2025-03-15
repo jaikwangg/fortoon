@@ -4,13 +4,13 @@ import { formDataToJsonObject } from "@/backend_lib/parsers";
 import { postStoryScheme } from "@/schemes/story.scheme";
 import { IStandardResponse } from "@/types/IApiCommunication";
 import { GenericRowDataPacket } from "@/types/IRowDataPacket";
-import { IUser } from "@/types/IUser";
-import { mkdirSync } from "fs";
-import { RowDataPacket } from "mysql2";
-import { NextApiRequest } from "next";
+// import { IUser } from "@/types/IUser";
+// import { mkdirSync } from "fs";
+// import { RowDataPacket } from "mysql2";
+// import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadImage } from "@/backend_lib/image_uploading/image_upload.lib";
-import { genreUpdateSchema, validateGenreIds } from "@/backend_lib/genre.lib";
+import { validateGenreIds } from "@/backend_lib/genre.lib";
 
 
 

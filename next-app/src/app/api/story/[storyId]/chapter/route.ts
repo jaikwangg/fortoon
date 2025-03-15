@@ -4,7 +4,7 @@ import { uploadImage } from '@/backend_lib/image_uploading/image_upload.lib';
 import { hasReadPermission } from '@/backend_lib/story/chapter_permission.lib';
 import { IStandardResponse } from '@/types/IApiCommunication';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import { MissingSlotContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+// import { MissingSlotContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { NextRequest, NextResponse } from 'next/server';
 
 

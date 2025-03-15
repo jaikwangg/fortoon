@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { RowDataPacket } from "mysql2";
 import { dbConnection } from "@/db/dbConnector";
 import { setJwtTokenCookie } from "@/backend_lib/auth/login.lib";
-import { IStandardResponse } from "@/types/IApiCommunication";
-
 
 export async function POST(req: Request) {
     let jsobj = null
@@ -19,7 +16,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const [resultSet, fs] = await dbConnection.query<RowDataPacket[]>("select * from User")
+        const [resultSet] = await dbConnection.query<RowDataPacket[]>("select * from User")
         // console.log(resultSet)
 
         // if (!jsobj) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { ResultSetHeader } from 'mysql2';
 import { verifyToken } from '@/backend_lib/auth/auth.cookie';
 import { IStandardResponse } from '@/types/IApiCommunication';
 import { dbConnection } from '@/db/dbConnector';

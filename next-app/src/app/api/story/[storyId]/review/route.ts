@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+// import { RowDataPacket } from 'mysql2';
 import { verifyToken } from '@/backend_lib/auth/auth.cookie';
 import { ErrorMessage, GetErrorMesage } from '@/constant/error_message';
 import { IStandardResponse } from '@/types/IApiCommunication';

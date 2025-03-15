@@ -1,7 +1,7 @@
 'use client';
 import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { Settings, User, Mail, Phone, MapPin, Github, Twitter, Linkedin, PlusCircle, Trash2 } from 'lucide-react';
+import { Settings, User, Mail, Phone, PlusCircle, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import {

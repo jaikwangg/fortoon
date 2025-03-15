@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useSettings } from "@/contexts/SettingsContext";
-import { Star, MessageSquare, Book, ThumbsUp, Eye, Calendar, Clock, ChevronRight, Plus, Loader2, Share2, Pencil, Trash2, ImageIcon } from "lucide-react";
+import { Star, MessageSquare, Book, Calendar, ChevronRight, Plus, Loader2, Pencil, Trash2, ImageIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -91,9 +91,9 @@ const ReviewCard = ({ review, onEdit, isAuthor, theme }: {
 
 export default function MangaDetail({ params }: MangaDetailProps) {
   const { user } = useAuth();
-  const { t, theme } = useSettings();
+  const { theme } = useSettings();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('description');
+  // const [activeTab, setActiveTab] = useState('description');
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [manga, setManga] = useState<Manga | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);

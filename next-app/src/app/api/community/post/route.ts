@@ -1,13 +1,11 @@
-import { RowDataPacket } from 'mysql2';
 import { verifyToken } from '@/backend_lib/auth/auth.cookie';
 import { uploadImage } from '@/backend_lib/image_uploading/image_upload.lib';
 import { ErrorMessage, GetErrorMesage } from '@/constant/error_message';
 import { createPostSchema } from '@/schemes/post.scheme';
 import { IStandardResponse } from '@/types/IApiCommunication';
 import { NextRequest, NextResponse } from 'next/server';
-import { addImagesToPost, createPost, deleteAllImagesForPost, filterHiddenPostData, getParentPostById, structurePosts, } from './post.helper';
+import { addImagesToPost, createPost, filterHiddenPostData, getParentPostById, structurePosts, } from './post.helper';
 import { getAllPosts } from './post.helper';
-import { ConstructionIcon } from 'lucide-react';
 import { checkChapterExists } from '@/backend_lib/story/chapter_permission.lib';
 
 

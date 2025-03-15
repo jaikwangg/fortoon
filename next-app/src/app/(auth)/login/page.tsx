@@ -12,7 +12,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, error, loginSuccess } = useAuth();
   const router = useRouter();
-  const { t, theme } = useSettings();
+  const { theme } = useSettings();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {

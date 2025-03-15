@@ -2,7 +2,7 @@ import { verifyToken } from '@/backend_lib/auth/auth.cookie';
 import { uploadImage } from '@/backend_lib/image_uploading/image_upload.lib';
 import { ErrorMessage, GetErrorMesage } from '@/constant/error_message';
 import { dbConnection } from '@/db/dbConnector';
-import { createPostSchema, updatePostScheme } from '@/schemes/post.scheme';
+import { updatePostScheme } from '@/schemes/post.scheme';
 import { IStandardResponse } from '@/types/IApiCommunication';
 import { NextRequest, NextResponse } from 'next/server';
 import { addImagesToPost, deleteAllImagesForPost } from '../post.helper';

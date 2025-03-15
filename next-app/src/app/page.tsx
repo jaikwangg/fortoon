@@ -2,10 +2,9 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Star, TrendingUp, Clock, MapPin } from "lucide-react";
+import { Star, Clock } from "lucide-react";
 import { useSettings } from "@/contexts/SettingsContext";
 import Slider from "react-slick";
-import Image from 'next/image';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { motion, AnimatePresence } from "framer-motion";
@@ -56,14 +55,14 @@ const fadeInVariants = {
 };
 
 export default function Home() {
-  const { t, theme } = useSettings();
-  const [activeTab, setActiveTab] = useState("popular");
+  const { theme } = useSettings();
+  // const [activeTab, setActiveTab] = useState("popular");
   const [mangaList, setMangaList] = useState<MangaItem[]>([]);
   const [topMangaList, setTopMangaList] = useState<MangaItem[]>([]);
   const [filteredMangaList, setFilteredMangaList] = useState<MangaItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [setIsMobile] = useState(false);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
 
