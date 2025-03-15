@@ -17,9 +17,9 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  // CardDescription,
+  // CardHeader,
+  // CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -238,7 +238,7 @@ export default function EditChapter() {
 
       // Debug log all form data
       console.log('Form data contents:');
-      for (let pair of formData.entries()) {
+      for (const pair of formData.entries()) {
         console.log(pair[0], ':', pair[1]);
       }
 
@@ -305,7 +305,7 @@ export default function EditChapter() {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">

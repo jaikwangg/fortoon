@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation'; // Use useParams for route parameters
 import { useSettings } from "@/contexts/SettingsContext";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -159,7 +159,7 @@ export default function CreateChapter() {
         formData.append('price', '0');
       }
       
-      chapterImages.forEach((image, index) => {
+      chapterImages.forEach((image) => {
         formData.append('imageChapterFiles', image);
       });
 
@@ -172,7 +172,7 @@ export default function CreateChapter() {
         throw new Error('Failed to create chapter');
       }
 
-      const data = await response.json();
+      // const data = await response.json();
       
       // Show success toast
       toast({

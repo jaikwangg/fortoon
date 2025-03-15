@@ -21,7 +21,7 @@ const formatDate = (dateString: string) => {
 };
 
 export default function MangaDashboard() {
-  const router = useRouter();
+  // const router = useRouter();
   const [purchased, setPurchased] = useState<Manga[]>([]);
   const { theme } = useSettings();
 

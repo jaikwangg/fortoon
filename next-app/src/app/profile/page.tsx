@@ -53,7 +53,7 @@ type UserManga = {
 export default function Profile() {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [showManga, setShowManga] = useState(false);
+  // const [showManga, setShowManga] = useState(false);
   const { theme } = useSettings();
   const [userManga, setUserManga] = useState<UserManga[]>([]);
   const [isLoading, setIsLoading] = useState(true);

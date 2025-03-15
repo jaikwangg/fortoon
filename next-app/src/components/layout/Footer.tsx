@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { Github, Twitter, Mail } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 const Footer = () => (
   <motion.footer

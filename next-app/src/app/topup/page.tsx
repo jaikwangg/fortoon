@@ -31,7 +31,7 @@ export default function TopUpPage() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const { toast } = useToast();
   const { theme } = useSettings();
-  const { user, refreshUser } = useAuth();
+  const { user } = useAuth();
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {

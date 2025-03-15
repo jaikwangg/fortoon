@@ -156,14 +156,14 @@ export default function Home() {
     ],
   };
 
-  const mobileNavVariants = {
-    hidden: { y: -100, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
+  // const mobileNavVariants = {
+  //   hidden: { y: -100, opacity: 0 },
+  //   visible: {
+  //     y: 0,
+  //     opacity: 1,
+  //     transition: { type: "spring", stiffness: 100 },
+  //   },
+  // };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

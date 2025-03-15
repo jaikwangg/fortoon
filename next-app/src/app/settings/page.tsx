@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import { User, Lock, Upload } from 'lucide-react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import { User, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

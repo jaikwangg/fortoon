@@ -1,9 +1,9 @@
-import { RowDataPacket } from 'mysql2';
+// import { RowDataPacket } from 'mysql2';
 import { IStandardResponse } from '../../types/IApiCommunication';
 import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 // import { jwtVerify, JWTPayload } from 'jose';
-import { dbConnection } from '@/db/dbConnector';
+// import { dbConnection } from '@/db/dbConnector';
 
 // const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'super-secret-key');
 const JWT_SECRET =process.env.JWT_SECRET  || "sec"

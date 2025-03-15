@@ -21,15 +21,15 @@ export const dbConnection = await mysql.createConnection(config);
 
 // A simple SELECT query
 try {
-    const [results, fields] = await dbConnection.query(
-        'select * from User limit 1'
-    );
+    // const [results, fields] = await dbConnection.query(
+    //     'select * from User limit 1'
+    // );
 
     // console.log(results); // results contains rows returned by server
     // console.log(fields); // fields contains extra meta data about results, if available
     console.info("DB Connected. ".green)
 } catch (err) {
-    let msg = "Can not connect to database (try fix your configuration file .env)".red
+    const msg = "Can not connect to database (try fix your configuration file .env)".red
     console.error(msg)
     console.log(err);
     throw new Error(msg)

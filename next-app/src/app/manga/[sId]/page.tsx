@@ -97,8 +97,8 @@ export default function MangaDetail({ params }: MangaDetailProps) {
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [manga, setManga] = useState<Manga | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [ setLoading] = useState(true);
+  const [ setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const [formErrors, setFormErrors] = useState<{

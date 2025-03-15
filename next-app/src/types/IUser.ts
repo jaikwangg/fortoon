@@ -1,4 +1,3 @@
-import { RowDataPacket } from 'mysql2';
 import { TSex } from './ISex';
 export interface IUser {
     uId: number

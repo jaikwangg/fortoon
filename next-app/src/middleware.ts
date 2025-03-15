@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/backend_lib/auth/auth.cookie';
-
+// import { verifyToken } from '@/backend_lib/auth/auth.cookie';
 
 export async function middleware(request: NextRequest) {
   const protectedPaths = [
