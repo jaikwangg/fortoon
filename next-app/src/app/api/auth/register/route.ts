@@ -7,6 +7,12 @@ import { uploadImage } from "@/backend_lib/image_uploading/image_upload.lib";
 import { CreateUserScheme } from "@/schemes/user.scheme";
 import { setJwtTokenCookie } from "@/backend_lib/auth/login.lib";
 
+// Define a custom interface for database errors
+interface DatabaseError extends Error {
+    code?: string;
+  }
+  
+
 export async function POST(req: NextRequest) {
     let stdRes: IStandardResponse = {};
     let parsed = null;
@@ -92,7 +98,7 @@ export async function POST(req: NextRequest) {
         }
         
         // Check if the error has a 'code' property and it's 'ER_DUP_ENTRY'
-        if (error instanceof Error && (error as any).code === 'ER_DUP_ENTRY') {
+        if (error instanceof Error && (error as DatabaseError).code === 'ER_DUP_ENTRY') {
             stdRes = {
             msg: "Duplicate entry error: A user with this field already exists.",
             msg2: errorMessage,
