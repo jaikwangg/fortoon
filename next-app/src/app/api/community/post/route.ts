@@ -37,9 +37,13 @@ export async function GET(req: NextRequest) {
         stdRes.data = { posts: structuredPosts };
 
         return NextResponse.json(stdRes, { status: 200 });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
         stdRes.msg = "Error retrieving posts.";
-        stdRes.msg2 = error.message;
+        stdRes.msg2 = errorMessage;
         console.error(stdRes);
         return NextResponse.json(stdRes, { status: 500 });
     }
@@ -135,9 +139,13 @@ export async function POST(req: NextRequest) {
         try {
             postId = await createPost(title, content, parentPostId, userId, postType, refId);
             console.log(`Post created successfully with ID: ${postId}`);
-        } catch (error: any) {
+        } catch (error: unknown) {
+            let errorMessage = "An unknown error occurred";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
             stdRes.msg = "Error creating post.";
-            stdRes.msg2 = error;
+            stdRes.msg2 = errorMessage;
             console.error(stdRes);
             return NextResponse.json(stdRes, { status: 500 });
         }
@@ -162,9 +170,13 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(stdRes, { status: 201 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
         stdRes.msg = "Error creating post.";
-        stdRes.msg2 = error;
+        stdRes.msg2 = errorMessage;
         console.error(stdRes);
         return NextResponse.json(stdRes, { status: 500 });
     }

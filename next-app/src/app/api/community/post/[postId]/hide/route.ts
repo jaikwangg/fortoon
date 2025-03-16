@@ -32,9 +32,13 @@ export async function GET(req: NextRequest, { params }: { params: { postId: stri
         stdRes.msg = "Post hidden successfully";
         return NextResponse.json(stdRes, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
         stdRes.msg = "Error hiding post";
-        stdRes.msg2 = error.message;
+        stdRes.msg2 = errorMessage;
         return NextResponse.json(stdRes, { status: 500 });
     }
 }
@@ -69,9 +73,13 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
         stdRes.msg = "Post unhidden successfully";
         return NextResponse.json(stdRes, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
         stdRes.msg = "Error unhiding post";
-        stdRes.msg2 = error.message;
+        stdRes.msg2 = errorMessage;
         return NextResponse.json(stdRes, { status: 500 });
     }
 }

@@ -47,9 +47,13 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             stdRes.msg = `Post with ID ${postId} not found.`;
             return NextResponse.json(stdRes, { status: 404 });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
+        let errorMessage = "An unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
         stdRes.msg = 'Error checking post existence.';
-        stdRes.msg2 = error.message;
+        stdRes.msg2 = errorMessage;
         return NextResponse.json(stdRes, { status: 500 });
     }
 
