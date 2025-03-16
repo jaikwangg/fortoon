@@ -13,14 +13,14 @@ export async function GET(req: NextRequest, { params }: { params: {
 }) {
     const { storyId } = params;
 
-    const stdRes: IStandardResponse = {};
+    // const stdRes: IStandardResponse = {};
 
     // Verify the user's token
     const verifiedRes = await verifyToken(req);
     const userId = verifiedRes.status === 200 ? verifiedRes.data.uId : null; // Get userId only if verified
 
     // Fetch chapters for the current story
-    let [chapterRs] = await dbConnection.query<RowDataPacket[]>(`
+    const [chapterRs] = await dbConnection.query<RowDataPacket[]>(`
         SELECT * 
         FROM Chapter c
         WHERE c.storyId = ?  
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, { params }: { params: {
             const isReadable = await hasReadPermission(userId, chapterId);
             if (isReadable) {
                 // Fetch images if the user has permission
-                let [imageRs] = await dbConnection.query<RowDataPacket[]>(`
+                const [imageRs] = await dbConnection.query<RowDataPacket[]>(`
                     SELECT imageSequenceNumber, url
                     FROM ChapterImage ci
                     WHERE ci.chapterId = ?  
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, { params }: TReqParams ) {
         stdRes.msg = "Required price."
         return NextResponse.json(stdRes, { status: 400 });
     }
-    let priceNumber : Number | null
+    let priceNumber : number | null
     try {
         priceNumber = Number(price)
     } catch (error) {
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest, { params }: TReqParams ) {
         where sId = ${storyId}
         `,
     );
-    const storyCount : Number = rowCountExistedStory[0].storyCount
+    const storyCount : number = rowCountExistedStory[0].storyCount
     // console.log()
     if (storyCount == 0) {
         stdRes.msg = `Unfound story so can not create chapters.`
@@ -155,7 +155,7 @@ export async function POST(req: NextRequest, { params }: TReqParams ) {
         and sId = ${storyId}
         `,
     );
-    const ownedStoryCount : Number = rowCheckPermissionToWriteStory[0].ownedStoryCount
+    const ownedStoryCount : number = rowCheckPermissionToWriteStory[0].ownedStoryCount
     console.log(rowCheckPermissionToWriteStory)
     if (ownedStoryCount == 0) {
         stdRes.msg = `You are not Author of this Story, No Allowd Create Chapters`

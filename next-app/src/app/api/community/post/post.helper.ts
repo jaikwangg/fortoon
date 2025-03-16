@@ -49,7 +49,7 @@ export async function deleteAllImagesForPost(postId: number) {
 
 // Helper function to retrieve all posts from the database
 export async function getAllPosts(userId: number | null = null): Promise<any[]> {
-    let query = `
+    const query = `
             SELECT 
                 p.*,
                 u.username as posterName,

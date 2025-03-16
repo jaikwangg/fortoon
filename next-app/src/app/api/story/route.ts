@@ -12,9 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { uploadImage } from "@/backend_lib/image_uploading/image_upload.lib";
 import { validateGenreIds } from "@/backend_lib/genre.lib";
 
-
-
-export async function GET(req: NextRequest) {
+export async function GET() {
     // const verifiedRes = await verifyToken(req);
     // if (verifiedRes.status !== 200) {
     //     return NextResponse.json({
@@ -23,7 +21,7 @@ export async function GET(req: NextRequest) {
     // }
 
     // Step 1: Retrieve all stories
-    let [storyRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+    const [storyRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
         `
         SELECT * 
         FROM Story s
@@ -35,7 +33,7 @@ export async function GET(req: NextRequest) {
         const storyId = s.sId;
 
         // Fetch chapters for the current story
-        let [chapterRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+        const [chapterRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
             `
                 SELECT * 
                 FROM Chapter c
@@ -45,7 +43,7 @@ export async function GET(req: NextRequest) {
         );
 
         // Fetch genres for the current story
-        let [genreRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+        const [genreRs,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
             `
                 SELECT g.gId, g.genreName 
                 FROM Genre g
@@ -201,7 +199,7 @@ export async function POST(req: NextRequest) {
                 msg: "error creating new Story",
             }
             const sqlState = error.sqlState
-            const sqlMessage = error.sqlMessage
+            // const sqlMessage = error.sqlMessage
 
             // stdRes.msg2 = sqlMessage
 

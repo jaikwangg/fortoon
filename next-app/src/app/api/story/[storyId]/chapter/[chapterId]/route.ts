@@ -78,7 +78,7 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
             msg: verifiedRes.msg
         }, { status: verifiedRes.status });
     }
-    const userIdFromCookie = verifiedRes.data.uId;
+    // const userIdFromCookie = verifiedRes.data.uId;
 
     // Parse form data
     let formData: FormData;
@@ -122,8 +122,8 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
     const price = formData.get("price") as string | null;
 
     // Build update query dynamically based on provided fields
-    let updateFields: string[] = [];
-    let updateValues: any[] = [];
+    const updateFields: string[] = [];
+    const updateValues: any[] = [];
 
     if (chapterName !== null) {
         updateFields.push('name = ?');

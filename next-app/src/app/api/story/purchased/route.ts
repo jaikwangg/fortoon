@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     try {
         // Get all stories that have permissions
-        let [accessibleStories,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+        const [accessibleStories,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
             `
             SELECT DISTINCT s.* 
             FROM Story s
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
                 const storyId = story.sId;
 
                 // Fetch chapters
-                let [chapters,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+                const [chapters,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
                     `
                     SELECT DISTINCT c.* 
                     FROM Chapter c
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
                 // console.log(chaptersWithImages)
 
                 // Fetch genres
-                let [genres,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
+                const [genres,] = await dbConnection.query<GenericRowDataPacket<any>[]>(
                     `
                     SELECT g.gId, g.genreName 
                     FROM Genre g
