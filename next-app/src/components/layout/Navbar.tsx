@@ -18,6 +18,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from 'next/navigation';
 import { CldImage } from 'next-cloudinary';
 
+interface Story {
+  title: string;
+  // Add other properties if needed
+}
+
 export default function Navbar() {
   const { user, signOut } = useAuth(); 
   const { theme, setTheme } = useSettings();
@@ -101,7 +106,7 @@ export default function Navbar() {
         }
 
         const data = await response.json();
-        const filteredResults = data.data.filter((story: any) => 
+        const filteredResults = data.data.filter((story: Story ) => 
           story.title.toLowerCase().includes(newSearchTerm.toLowerCase())
         );
         setSearchResults(filteredResults);
