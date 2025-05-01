@@ -48,14 +48,21 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             return NextResponse.json(stdRes, { status: 404 });
         }
     } catch (error: unknown) {
-        let errorMessage = "An unknown error occurred";
-        if (error instanceof Error) {
-            errorMessage = error.message;
+        if (error instanceof Error && 'code' in error) {
+            const errWithCode = error as Error & { code: string };
+            if (errWithCode.code === 'ER_DUP_ENTRY') {
+                stdRes.msg = 'You have already liked this post.';
+                return NextResponse.json(stdRes, { status: 400 });
+            }
+            stdRes.msg = 'Error liking the post.';
+            stdRes.msg2 = errWithCode.message;
+        } else {
+            stdRes.msg = 'Error liking the post.';
+            stdRes.msg2 = 'Unknown error';
         }
-        stdRes.msg = 'Error checking post existence.';
-        stdRes.msg2 = errorMessage;
         return NextResponse.json(stdRes, { status: 500 });
     }
+    
 
 
     // Step 3: Attempt to add the like if it doesn't already exist
@@ -114,9 +121,15 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
 
         stdRes.msg = 'Post unliked successfully.';
         return NextResponse.json(stdRes, { status: 200 });
-    } catch (error: any) {
-        stdRes.msg = 'Error unliking the post.';
-        stdRes.msg2 = error.message;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            stdRes.msg = 'Error unliking the post.';
+            stdRes.msg2 = error.message;
+        } else {
+            stdRes.msg = 'Error unliking the post.';
+            stdRes.msg2 = 'Unknown error';
+        }
         return NextResponse.json(stdRes, { status: 500 });
     }
+    
 }
