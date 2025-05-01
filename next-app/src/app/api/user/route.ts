@@ -104,7 +104,7 @@ export async function PUT(req: NextRequest) {
         }
 
         // Build the dynamic update query based on the provided fields
-        let updateFields = [];
+        const updateFields = [];
         if (parsedData.displayName) {
             updateFields.push(`displayName = '${parsedData.displayName}'`);
         }
