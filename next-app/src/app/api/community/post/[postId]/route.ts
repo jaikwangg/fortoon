@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest, { params }: { params: { postId: stri
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data as { uId: number }).uId;
 
     try {
         // Parse formData from the request

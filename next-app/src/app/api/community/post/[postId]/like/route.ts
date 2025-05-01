@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data as { uId: number }).uId;
     const postId = parseInt(params.postId, 10); // Extract and parse postId from request params
 
     // console.log(postId)
@@ -97,7 +97,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data as { uId: number }).uId;
     const postId = parseInt(params.postId, 10); // Extract and parse postId from request params
 
     // Step 2: Check if the post exists

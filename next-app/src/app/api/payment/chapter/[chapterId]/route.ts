@@ -13,7 +13,8 @@ export async function POST(req: NextRequest, { params }: { params: { chapterId: 
         return NextResponse.json({ msg: verifiedRes.msg }, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Assuming `verifyToken` returns the user ID.
+    const     userId = (verifiedRes.data as { uId: number }).uId;
+
 
     let stdRes: IStandardResponse = {};
     

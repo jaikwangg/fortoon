@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         let userId: number | null = null;
         const verifiedRes = await verifyToken(req);
         if (verifiedRes.status === 200) {
-            userId = verifiedRes.data.uId;
+            userId = (verifiedRes.data as { uId: number }).uId;
         }
 
         // Get trending posts (posts with most likes in the last 7 days)

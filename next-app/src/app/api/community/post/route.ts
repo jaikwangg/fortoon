@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
         let userId: number | null = null;
         const verifiedRes = await verifyToken(req);
         if (verifiedRes.status === 200) {
-            userId = verifiedRes.data.uId;
+            userId = (verifiedRes.data as { uId: number }).uId;
         }
 
         // Step 1: Retrieve all posts and likes from the database
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data as { uId: number }).uId;
 
     try {
         // Parse formData from the request

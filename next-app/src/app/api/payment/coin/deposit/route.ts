@@ -11,7 +11,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ msg: verifiedRes.msg }, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Assuming `verifyToken` returns the user ID.
+    const userId = (verifiedRes.data as { uId: number }).uId;
+
     const { amount } = await req.json(); // Get the deposit amount from the request body
 
     let stdRes: IStandardResponse = {};

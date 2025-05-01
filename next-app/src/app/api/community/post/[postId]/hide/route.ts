@@ -55,7 +55,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId;
+    const userId = (verifiedRes.data as { uId: string }).uId;
 
     try {
         // Check if post exists and belongs to user

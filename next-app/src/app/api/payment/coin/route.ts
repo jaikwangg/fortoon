@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ msg: verifiedRes.msg }, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId;
+    const     userId = (verifiedRes.data as { uId: number }).uId;
     let stdRes: IStandardResponse = {};
 
     // Fetch user's current balance
