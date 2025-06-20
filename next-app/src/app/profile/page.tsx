@@ -27,28 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useUserRefresh } from '@/lib/hooks/useUserRefresh';
-
-// Update the UserManga type to match the response
-type UserManga = {
-  sId: number;
-  title: string;
-  introduction: string;
-  postedDatetime: string;
-  authorId: number;
-  coverImageUrl: string;
-  profilePicUrl: string;
-  chapters: {
-    name: string;
-    cId: number;
-    storyId: number;
-    chapterSequence: number;
-    price: number;
-  }[];
-  genres: {
-    gId: number;
-    genreName: string;
-  }[];
-};
+import { UserManga } from "@/lib/types";
 
 export default function Profile() {
   const { user } = useAuth();

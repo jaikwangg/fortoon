@@ -14,25 +14,7 @@ type UserProfile = {
   profilePicUrl: string;
 }
 
-type UserManga = {
-  sId: number;
-  title: string;
-  introduction: string;
-  postedDatetime: string;
-  authorId: number;
-  coverImageUrl: string;
-  chapters: {
-    name: string;
-    cId: number;
-    storyId: number;
-    chapterSequence: number;
-    price: number;
-  }[];
-  genres: {
-    gId: number;
-    genreName: string;
-  }[];
-};
+import { UserManga } from "@/lib/types";
 
 export default function UserProfile({ params }: { params: { uId: string } }) {
   const { theme } = useSettings();

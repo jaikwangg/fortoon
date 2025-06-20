@@ -284,3 +284,24 @@ export interface Genre {
 }
 
 export type { TSex };
+
+export interface UserManga {
+  sId: number;
+  title: string;
+  introduction: string;
+  postedDatetime: string;
+  authorId: number;
+  coverImageUrl: string;
+  profilePicUrl: string;
+  chapters: {
+    name: string;
+    cId: number;
+    storyId: number;
+    chapterSequence: number;
+    price: number;
+  }[];
+  genres: {
+    gId: number;
+    genreName: string;
+  }[];
+};
