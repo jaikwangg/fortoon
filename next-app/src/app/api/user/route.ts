@@ -21,10 +21,13 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+        const hasUid = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data;
+        const uId = hasUid ? (verifiedRes.data as { uId: number }).uId : undefined;
+
         // Get updated user data from database
         const [results] = await dbConnection.query<GenericRowDataPacket<IUser>[]>(
             'SELECT * FROM User WHERE uId = ?',
-            [verifiedRes.data.uId]
+            [uId]
         );
 
         if (!results.length) {
@@ -64,6 +67,9 @@ export async function PUT(req: NextRequest) {
     }
 
     try {
+        const hasUid = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data;
+        const uId = hasUid ? (verifiedRes.data as { uId: number }).uId : undefined;
+        
         const formData = await req.formData();
         if (!formData) {
             return NextResponse.json({ msg: "formData is required" }, { status: 400 });
@@ -85,19 +91,30 @@ export async function PUT(req: NextRequest) {
         let backgroundName = "";
 
         if (profilePicFile) {
-            profilePicName = `profilePic-${parsedData.username || verifiedRes.data.username}-${profilePicFile.name}`;
+            const hasUser = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'username' in verifiedRes.data;
+            const fallbackUsername = hasUser ? (verifiedRes.data as { username: string }).username : 'user';
+            profilePicName = `profilePic-${parsedData.username || fallbackUsername}-${profilePicFile.name}`;
             const uploadResult = await uploadImage(profilePicFile, profilePicName);
-            profilePicName = uploadResult.data.newFilename;
-            // uploadResult.
+            const newProfilePicName = (uploadResult.data as { newFilename?: string })?.newFilename;
+            if (!newProfilePicName) {
+                return NextResponse.json({ msg: "Profile picture upload failed" }, { status: 500 });
+            }
+            profilePicName = newProfilePicName;
             if (uploadResult.status !== 200) {
                 return NextResponse.json(uploadResult, { status: uploadResult.status });
             }
         }
 
         if (backgroundFile) {
-            backgroundName = `background-${parsedData.username || verifiedRes.data.username}-${backgroundFile.name}`;
+            const hasUser = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'username' in verifiedRes.data;
+            const fallbackUsername = hasUser ? (verifiedRes.data as { username: string }).username : 'user';
+            backgroundName = `background-${parsedData.username || fallbackUsername}-${backgroundFile.name}`;
             const uploadResult = await uploadImage(backgroundFile, backgroundName);
-            backgroundName = uploadResult.data.newFilename;
+            const newBackgroundName = (uploadResult.data as { newFilename?: string })?.newFilename;
+            if (!newBackgroundName) {
+                return NextResponse.json({ msg: "Background upload failed" }, { status: 500 });
+            }
+            backgroundName = newBackgroundName;
             if (uploadResult.status !== 200) {
                 return NextResponse.json(uploadResult, { status: uploadResult.status });
             }
@@ -123,8 +140,8 @@ export async function PUT(req: NextRequest) {
             await dbConnection.execute(`
                 UPDATE User
                 SET ${updateFields.join(", ")}
-                WHERE uId = ${verifiedRes.data.uId}
-            `);
+                WHERE uId = ?
+            `, [uId]);
         }
 
         stdRes = { msg: "User settings updated successfully", status: 200 };

@@ -17,7 +17,9 @@ export async function GET(req: NextRequest, { params }: { params: {
 
     // Verify the user's token
     const verifiedRes = await verifyToken(req);
-    const userId = verifiedRes.status === 200 ? verifiedRes.data.uId : null; // Get userId only if verified
+    const userId = (verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+      ? (verifiedRes.data as { uId: number }).uId
+      : null;
 
     // Fetch chapters for the current story
     const [chapterRs] = await dbConnection.query<RowDataPacket[]>(`
@@ -35,7 +37,7 @@ export async function GET(req: NextRequest, { params }: { params: {
 
         // If the user is authenticated, check if they have read permission
         if (userId) {
-            const isReadable = await hasReadPermission(userId, chapterId);
+            const isReadable = await hasReadPermission(String(userId), chapterId);
             if (isReadable) {
                 // Fetch images if the user has permission
                 const [imageRs] = await dbConnection.query<RowDataPacket[]>(`
@@ -86,17 +88,16 @@ export async function POST(req: NextRequest, { params }: TReqParams ) {
     }
     const stdRes : IStandardResponse  = {}
 
-    const userIdFromCookie = verifiedRes.data.uId
+    const userIdFromCookie = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+      ? (verifiedRes.data as { uId: number }).uId
+      : undefined;
     
-
-
-
     let formData : FormData
     try {
         formData = await req.formData()
     } catch (error) {
-        stdRes.msg = `Content-Type was not one of "multipart/form-data" or "application/x-www-form-urlencoded`
-        stdRes.msg2 = error
+        stdRes.msg = `Content-Type was not one of \"multipart/form-data\" or \"application/x-www-form-urlencoded\"`
+        stdRes.msg2 = error instanceof Error ? error.message : String(error)
         console.error(stdRes)
         return NextResponse.json(stdRes, { status: 400 });
     }
@@ -192,45 +193,32 @@ export async function POST(req: NextRequest, { params }: TReqParams ) {
 
         // await uploadImage(parsed.coverImage, filename)
         // Prepare values for bulk insert
-        // const chapterImageValues = images.map(
-        
-
         const chapterImageValues = await Promise.all(images.map(async (img, index) => {
-            // return  `(${chapterId}, ${index + 1}), {}`
             const file = img as File
             const imageName = `chapter-img-${curr.toString()}-${file.name}`
 
-            // const file 
-            // const x = img as File
-            // x.streamo
-            // const file = img as File
-
-
-
             const xStdRes = await uploadImage(file, imageName)
-            const filename = xStdRes.data.newFilename
-                // (_, index) => 
-
+            const filename = (xStdRes.data as { newFilename?: string }).newFilename
             // return `(${chapterId}, ${index + 1}, '${imageName}')`; // Assuming uploadResult has a `url` property
             return `(${chapterId}, ${index + 1}, '${filename}')`;
         }))
     
-        // Perform the batch insert
-        const [rsChapterImage] = await dbConnection.query<ResultSetHeader>(`
-            INSERT INTO ChapterImage (chapterId, imageSequenceNumber, url)
-            VALUES ${chapterImageValues}
-        `);
-        console.log(rsChapterImage)
-    
-        stdRes.msg = `Chapter '${chapterName}' created in Story ${storyId} with ${images.length} images.`;
-        return NextResponse.json(stdRes, { status: 200 });
-    } catch (error:any) {
-        // Catch any errors that occur during the insertion
-        console.error(error)
-        stdRes.msg = `Error while inserting chapter images: ${error.message}`;
-        console.error("Error during ChapterImage insert:", error);
-    
-        return NextResponse.json(stdRes, { status: 500 });
-    }
+    // Perform the batch insert
+    const [rsChapterImage] = await dbConnection.query<ResultSetHeader>(`
+        INSERT INTO ChapterImage (chapterId, imageSequenceNumber, url)
+        VALUES ${chapterImageValues}
+    `);
+    console.log(rsChapterImage)
+
+    stdRes.msg = `Chapter '${chapterName}' created in Story ${storyId} with ${images.length} images.`;
+    return NextResponse.json(stdRes, { status: 200 });
+} catch (error:any) {
+    // Catch any errors that occur during the insertion
+    console.error(error)
+    stdRes.msg = `Error while inserting chapter images: ${error.message}`;
+    console.error("Error during ChapterImage insert:", error);
+
+    return NextResponse.json(stdRes, { status: 500 });
+}
 
 }

@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useSettings } from "@/contexts/SettingsContext";
 import { Loader2 } from "lucide-react";
 import Link from 'next/link';
-import type { FormData, FormErrors } from '@/lib/types';
+import type { UserFormData, FormErrors, TSex } from '@/lib/types';
 
 const RegisterForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<UserFormData, 'sex'> & { sex: '' | TSex }>({
     username: '',
     password: '',
     displayName: '',
@@ -41,12 +41,16 @@ const RegisterForm = () => {
 
     const formDataToSend = new FormData();
     
-    (Object.keys(formData) as Array<keyof FormData>).forEach(key => {
-        const value = formData[key];
-        if (value !== null) {
+    (Object.keys(formData) as Array<keyof typeof formData>).forEach(key => {
+      const value = formData[key];
+      if (value !== null && value !== undefined && value !== '') {
+        if (value instanceof File) {
           formDataToSend.append(key, value);
+        } else {
+          formDataToSend.append(key, String(value));
         }
-      });
+      }
+    });
   
 
     try {

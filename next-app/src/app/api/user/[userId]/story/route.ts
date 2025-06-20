@@ -18,7 +18,8 @@ export async function GET(
     try {
         const userId = parseInt(params.userId);
         const verifiedRes = await verifyToken(request);
-        const isOwnUser = verifiedRes.status === 200 && verifiedRes.data?.uId === userId;
+        const hasUid = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data;
+        const isOwnUser = hasUid && (verifiedRes.data as { uId: number }).uId === userId;
         const isAnonymous = verifiedRes.status !== 200;
 
         // First get all story IDs for this user
@@ -41,7 +42,7 @@ export async function GET(
             const processedChapters = await processChaptersWithImages(
                 chapters, 
                 isAnonymous, 
-                verifiedRes.status === 200 ? verifiedRes.data?.uId.toString() : null
+                hasUid ? (verifiedRes.data as { uId: number }).uId.toString() : null
             );
 
             return {

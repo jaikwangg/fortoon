@@ -47,7 +47,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   }, [language, theme, fontSize]);
 
-  const t = (key: keyof typeof translations.en) => translations[language][key];
+  const t = (key: keyof typeof translations.en) =>
+    (translations[language as keyof typeof translations] || translations.en)[key];
 
   return (
     <SettingsContext.Provider value={{ language, setLanguage, theme, setTheme, fontSize, setFontSize, t }}>

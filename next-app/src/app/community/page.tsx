@@ -58,7 +58,8 @@ const PostCard: React.FC<{
   const [replyFormData, setReplyFormData] = useState<ReplyFormData>({
     title: '',
     content: '',
-    images: []
+    images: [],
+    parentPostId: Number(post.pId), 
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -99,7 +100,8 @@ const PostCard: React.FC<{
       setReplyFormData({
         title: '',
         content: '',
-        images: []
+        images: [],
+        parentPostId: Number(post.pId),
       });
       setIsReplying(false);
       onPostUpdate();

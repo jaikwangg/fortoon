@@ -1,4 +1,5 @@
 import { translations } from '@/lib/translations';
+import type { TSex } from '../types/ISex';
 
 // Theme and UI Types
 export type Theme = 'light' | 'dark';
@@ -281,3 +282,5 @@ export interface Genre {
   gId: number;
   genreName: string;
 }
+
+export type { TSex };

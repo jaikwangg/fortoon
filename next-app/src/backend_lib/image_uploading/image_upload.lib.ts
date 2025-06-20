@@ -41,7 +41,7 @@ export const uploadImage = async (file: File, filename: string): Promise<IStanda
     } catch (error) {
         console.error(`${error}`.red);
         stdRes.msg = 'Error uploading file to Cloudinary';
-        stdRes.msg2 = error;
+        stdRes.msg2 = error instanceof Error ? error.message : String(error);
         stdRes.status = 500;
     }
 

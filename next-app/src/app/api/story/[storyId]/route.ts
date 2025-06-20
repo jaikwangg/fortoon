@@ -26,7 +26,9 @@ export async function GET(req: NextRequest, { params }: { params: { storyId: str
     // Verify the user's token
     const verifiedRes = await verifyToken(req);
     const isAnonymous = verifiedRes.status !== 200;
-    const userId = verifiedRes.status === 200 ? verifiedRes.data.uId : null;
+    const userId = (verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+      ? (verifiedRes.data as { uId: number }).uId
+      : null;
 
     // Step 1: Fetch the story details
     const rs = await fetchStoryDetails(storyId);
@@ -38,7 +40,8 @@ export async function GET(req: NextRequest, { params }: { params: { storyId: str
     // Step 2-4: Fetch and process all story data
     const chapters = await fetchStoryChapters(storyId);
     const genres = await fetchStoryGenres(storyId);
-    const chaptersWithImages = await processChaptersWithImages(chapters, isAnonymous, userId);
+    const userIdStr = userId !== null ? String(userId) : null;
+    const chaptersWithImages = await processChaptersWithImages(chapters, isAnonymous, userIdStr);
 
     // Step 5: Combine story, chapters, and genres into the response
     const data = {
@@ -64,7 +67,14 @@ export async function PUT(req: NextRequest, { params }: { params: { storyId: str
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+      ? (verifiedRes.data as { uId: number }).uId
+      : null;
+
+    if (userId === null) {
+        stdRes.msg = "User ID not found in token.";
+        return NextResponse.json(stdRes, { status: 401 });
+    }
 
     try {
         // Parse formData from the request
@@ -121,11 +131,12 @@ export async function PUT(req: NextRequest, { params }: { params: { storyId: str
                 filename = setStandardImageName(coverImage.name, "storyCover");
                 const uploadRes = await uploadImage(coverImage, filename);
                 
-                if (!uploadRes.data?.newFilename) {
+                const newFilename = (uploadRes.data as { newFilename?: string })?.newFilename;
+                if (!newFilename) {
                     throw new Error('Failed to get upload filename');
                 }
                 
-                filename = uploadRes.data.newFilename;
+                filename = newFilename;
             } catch (error: any) {
                 console.error('Image upload error:', error);
                 throw new Error('Failed to upload image');
@@ -201,10 +212,17 @@ export async function DELETE(req: NextRequest, { params }: { params: { storyId: 
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId;
+    const userId = (verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+      ? (verifiedRes.data as { uId: number }).uId
+      : null;
+
+    if (userId === null) {
+        stdRes.msg = "User ID not found in token.";
+        return NextResponse.json(stdRes, { status: 401 });
+    }
 
     try {
-        const isOwner = await checkStoryOwnership(storyIdNumber, userId);
+        const isOwner = await checkStoryOwnership(storyIdNumber, String(userId));
         if (!isOwner) {
             stdRes.msg = "Story not found or you don't have permission to delete it.";
             return NextResponse.json(stdRes, { status: 403 });

@@ -15,7 +15,9 @@ export async function PUT(req: NextRequest, { params }: { params: { storyId: str
             return NextResponse.json(stdRes, { status: verifiedRes.status });
         }
 
-        const userId = verifiedRes.data?.uId;
+        const userId = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+            ? (verifiedRes.data as { uId: number }).uId
+            : undefined;
         const { storyId } = params;
 
         // Step 2: Parse the incoming JSON data and validate it with Zod
@@ -27,7 +29,7 @@ export async function PUT(req: NextRequest, { params }: { params: { storyId: str
         if (!parsed.success) {
             stdRes = {
                 msg: "Invalid genre data",
-                msg2: parsed.error.issues
+                msg2: parsed.error.issues.map(issue => issue.message).join("; ")
             };
             return NextResponse.json(stdRes, { status: 400 });
         }

@@ -14,7 +14,9 @@ export async function GET(req: NextRequest) {
         }, { status: verifiedRes.status });
     }
     
-    const userId = verifiedRes.data.uId;
+    const userId = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+        ? (verifiedRes.data as { uId: number }).uId
+        : undefined;
     const isAnonymous = false;
 
     try {
@@ -48,7 +50,8 @@ export async function GET(req: NextRequest) {
                 );
 
                 // Process chapters with images using the existing helper function
-                const chaptersWithImages = await processChaptersWithImages(chapters, isAnonymous, userId);
+                const userIdStr = userId !== undefined ? String(userId) : null;
+                const chaptersWithImages = await processChaptersWithImages(chapters, isAnonymous, userIdStr);
                 // console.log(chaptersWithImages)
 
                 // Fetch genres

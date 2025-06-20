@@ -47,8 +47,14 @@ export async function POST(req: NextRequest, { params }: { params: { storyId: st
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+        ? (verifiedRes.data as { uId: number }).uId
+        : undefined;
     const storyId = parseInt(params.storyId);
+    if (userId === undefined) {
+        stdRes.msg = "Unauthorized: User ID not found in token.";
+        return NextResponse.json(stdRes, { status: 401 });
+    }
 
     try {
         // Parse formData from the request
@@ -129,8 +135,14 @@ export async function PUT(req: NextRequest, { params }: { params: { storyId: str
         return NextResponse.json(verifiedRes, { status: verifiedRes.status });
     }
 
-    const userId = verifiedRes.data.uId; // Get the authenticated user's ID
+    const userId = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+        ? (verifiedRes.data as { uId: number }).uId
+        : undefined;
     const storyId = parseInt(params.storyId);
+    if (userId === undefined) {
+        stdRes.msg = "Unauthorized: User ID not found in token.";
+        return NextResponse.json(stdRes, { status: 401 });
+    }
 
     try {
         // Parse formData from the request

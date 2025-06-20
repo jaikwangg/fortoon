@@ -62,7 +62,7 @@ export default function Home() {
   const [filteredMangaList, setFilteredMangaList] = useState<MangaItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [setIsMobile] = useState(false);
+  const [IsMobile, setIsMobile] = useState(false);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
 

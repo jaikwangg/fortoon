@@ -13,7 +13,8 @@ export async function GET(
     try {
         const userId = parseInt(params.userId);
         const verifiedRes = await verifyToken(request);
-        const isOwnUser = verifiedRes.status === 200 && verifiedRes.data?.uId === userId;
+        const hasUid = verifiedRes.status === 200 && verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data;
+        const isOwnUser = hasUid && (verifiedRes.data as { uId: number }).uId === userId;
 
         // Fetch user data with selected fields
         const [userData] = await dbConnection.query<RowDataPacket[]>(

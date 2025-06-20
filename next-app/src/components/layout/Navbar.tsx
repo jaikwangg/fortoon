@@ -30,7 +30,7 @@ export default function Navbar() {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [balance, setBalance] = useState(0);
-  const [ setSearchResults] = useState([]);
+  const [SearchResults, setSearchResults] = useState<Story[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();

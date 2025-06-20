@@ -13,7 +13,9 @@ export async function GET(req: NextRequest, { params }: { params: { chapterId: s
 
     // Verify user token
     const verifiedRes = await verifyToken(req);
-    const userIdFromCookie = verifiedRes.data?.uId;
+    const userIdFromCookie = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+        ? (verifiedRes.data as { uId: number }).uId
+        : undefined;
 
     try {
         // Get chapter data with author information and check permissions
@@ -61,7 +63,7 @@ export async function GET(req: NextRequest, { params }: { params: { chapterId: s
     } catch (error: any) {
         console.error('Error fetching chapter:', error);
         stdRes.msg = `Error fetching chapter: ${error.message}`;
-        stdRes.msg2 = error;
+        stdRes.msg2 = error instanceof Error ? error.message : String(error);
         return NextResponse.json(stdRes, { status: 500 });
     }
 } 
@@ -86,7 +88,7 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
         formData = await req.formData();
     } catch (error) {
         stdRes.msg = `Content-Type was not one of "multipart/form-data" or "application/x-www-form-urlencoded"`;
-        stdRes.msg2 = error;
+        stdRes.msg2 = error instanceof Error ? error.message : String(error);
         console.error(stdRes);
         return NextResponse.json(stdRes, { status: 400 });
     }
@@ -173,13 +175,14 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
                     const imageName = setStandardImageName(file.name, 'chapterImage');
                     const uploadResult = await uploadImage(file, imageName);
                     
-                    if (!uploadResult.data?.newFilename) {
+                    const newFilename = (uploadResult.data as { newFilename?: string })?.newFilename;
+                    if (!newFilename) {
                         throw new Error('Failed to upload image');
                     }
 
                     return {
                         sequence: entry.sequence,
-                        url: uploadResult.data.newFilename
+                        url: newFilename
                     };
                 }
             })
@@ -207,21 +210,10 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
         
         console.error('Error updating chapter:', error);
         stdRes.msg = `Error updating chapter: ${error.message}`;
-        stdRes.msg2 = error;
+        stdRes.msg2 = error instanceof Error ? error.message : String(error);
         return NextResponse.json(stdRes, { status: 500 });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 export async function DELETE(req: NextRequest, { params }: { params: { chapterId: string } }) {
     const { chapterId } = params;
@@ -234,7 +226,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { chapterId
             msg: verifiedRes.msg
         }, { status: verifiedRes.status });
     }
-    const userIdFromCookie = verifiedRes.data.uId;
+    const userIdFromCookie = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+        ? (verifiedRes.data as { uId: number }).uId
+        : undefined;
 
     // Validate chapter ownership
     const [chapterOwnership] = await dbConnection.query<RowDataPacket[]>(`
@@ -282,7 +276,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { chapterId
         
         console.error('Error deleting chapter:', error);
         stdRes.msg = `Error deleting chapter: ${error.message}`;
-        stdRes.msg2 = error;
+        stdRes.msg2 = error instanceof Error ? error.message : String(error);
         return NextResponse.json(stdRes, { status: 500 });
     }
 }

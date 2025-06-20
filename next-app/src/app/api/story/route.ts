@@ -83,7 +83,9 @@ export async function POST(req: NextRequest) {
             msg: verifiedRes.msg
         }, { status: verifiedRes.status });
     }
-    const authorId = verifiedRes.data.uId
+    const authorId = (verifiedRes.data && typeof verifiedRes.data === 'object' && 'uId' in verifiedRes.data)
+    ? (verifiedRes.data as { uId: number }).uId
+    : undefined;
 
 
     let parsed = null
@@ -124,7 +126,7 @@ export async function POST(req: NextRequest) {
         if (!parsed.success) {
             stdRes = {
                 msg: "Invalid parsing data",
-                msg2: parsed.error.issues
+                msg2: parsed.error.issues.map(issue => issue.message).join("; ")
             };
             // console.log(parsed.error)
             // console.log("ready to return")
